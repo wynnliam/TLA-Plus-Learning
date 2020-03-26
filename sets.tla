@@ -2,7 +2,7 @@
 
 ---- MODULE sets ----
 
-EXTENDS Naturals
+EXTENDS Naturals, FiniteSets
 
 \* FILTERING
 \* We can filter a set with the following syntax:
@@ -47,4 +47,46 @@ mystery_map == { x + y : x \in 0..9, y \in { y * 10 : y \in 0..9 } }
 \* It's all values between 0 and 99. We take each value from 0 to 9
 \* and add those to each value in 0, 10, 20, ..., 90
 
+\* Defines the range of a tuple of values
+Range(T) == {T[x] : x \in DOMAIN T}
+
+\* CHOOSE
+\* Choose an item in a set where some predicate holds. The syntax:
+
+\* CHOOSE x \in S : P(x)
+
+some_odd_val_from_1_to_8 == CHOOSE x \in 1..8 : x % 2 /= 0
+\* Will return a single item x in 1..8 where x % 2 /= 0.
+\* TLC doesn't branch. The number is arbitrary, but it's always
+\* the same one. On my machine, it's 1.
+
+\* Uncomment this line and evaluate in the expression runner
+\* bad_choose == CHOOSE x \in 1..8 : x > 8
+\* Will throw an error! Using CHOOSE implies there is at least
+\* one item in the set where the predicate holds.
+
+\* SET OPERATORS
+
+is_in_set == 1 \in set_ten \* Outputs TRUE
+is_not_in_set == 11 \notin set_ten \* Outputs TRUE
+is_subset == {1, 2, 3} \subseteq set_ten \* Outputs TRUE
+
+double_in_set(s1, s2) == { x * 2 : x \in s1} \subseteq s2
+
+union_demo == {1, 2} \union {2, 3} \* Outputs {1, 2, 3}
+intersect_demo == {1, 2} \intersect {2, 3} \* Outputs {2}
+diff_demo == {1, 2} \ {2, 3} \*Outputs {1}
+power_demo == SUBSET {1, 2}
+\* Outputs all subsets of {1, 2}: {{}, {1}, {2}, {1, 2}}
+flat_demo == UNION {{1}, {1, 2}, {5}}
+\* Outputs the flattened union: {1, 2, 5}
+
+\* Note that sets is a tuple of sets
+found_op(item, sets) == item \in UNION Range(sets)
+
+\* Some neat FiniteSets operations
+is_finite_demo == IsFiniteSet(1..1000)
+cardinality_demo == Cardinality(1..100)
+
+get_all_sets_of_two(set) == {sub \in SUBSET set : Cardinality(sub) = 2}
 ====
