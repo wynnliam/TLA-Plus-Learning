@@ -38,7 +38,7 @@ end define;
 
 begin
 while TRUE do
-  assert tower[TSPACES] /= SOLUTION;
+  assert tower /= SOLUTION;
   with from \in {x \in D : tower[x]  /= <<>>},
        to \in {
                 y \in D:
@@ -64,7 +64,7 @@ vars == << tower >>
 Init == (* Global variables *)
         /\ tower = Board
 
-Next == /\ Assert(tower[TSPACES] /= SOLUTION, 
+Next == /\ Assert(tower /= SOLUTION, 
                   "Failure of assertion at line 41, column 3.")
         /\ \E from \in {x \in D : tower[x]  /= <<>>}:
              \E to \in {
